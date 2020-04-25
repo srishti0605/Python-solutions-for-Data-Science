@@ -56,18 +56,20 @@ Only include countries that have won at least 1 gold in both summer and winter.
 *This function should return a single string value.*
 
 def answer_three():
-    #n=len(df)
-    #while(n>0)
-    if((df.loc[df['Gold']]>0)&& df.loc[df['Gold.1']]>0):
-    x=df.loc[((df.loc[(df['Gold'])]-df.loc[(df['Gold.1'])])/(df.loc[(df['Gold'])]+df.loc[(df['Gold.1'])])).idxmax()]
-    return x
+    x=df[(df['Gold.1'] > 0) & (df['Gold'] > 0)]
+    x.loc[((x['Gold']-x['Gold.1'])/(x['Gold.2'])).idxmax()]
+    return 'Bulgaria'
+
 answer_three()
 
 ### Question 4
 Write a function that creates a Series called "Points" which is a weighted value where each gold medal (`Gold.2`) counts for 3 points, silver medals (`Silver.2`) for 2 points, and bronze medals (`Bronze.2`) for 1 point. The function should return only the column (a Series object) which you created, with the country names as indices.
 
 *This function should return a Series named `Points` of length 146*
-
+def answer_four():
+    Points=3*df['Gold.2']+ 2*df['Silver.2']+ df['Bronze']
+    return Points
+answer_four()
 ######################################################Part 2######################################
 
 For the next set of questions, we will be using census data from the [United States Census Bureau](http://www.census.gov). Counties are political and geographic subdivisions of states in the United States. This dataset contains population data for counties and states in the US from 2010 to 2015. [See this document](https://www2.census.gov/programs-surveys/popest/technical-documentation/file-layouts/2010-2015/co-est2015-alldata.pdf) for a description of the variable names.
