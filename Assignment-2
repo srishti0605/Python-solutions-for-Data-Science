@@ -67,7 +67,7 @@ Write a function that creates a Series called "Points" which is a weighted value
 
 *This function should return a Series named `Points` of length 146*
 def answer_four():
-    Points=3*df['Gold.2']+ 2*df['Silver.2']+ df['Bronze']
+    Points=3*df['Gold.2']+ 2*df['Silver.2']+ df['Bronze.2']
     return Points
 answer_four()
 ######################################################Part 2######################################
@@ -83,16 +83,26 @@ Which state has the most counties in it? (hint: consider the sumlevel key carefu
 census_df = pd.read_csv('census.csv')
 census_df.head()
 def answer_five():
-    census_df.set_index('STNAME')
-    census_df.iloc[census_df['COUNTY'].idxmax()]
-    return 'Virginia'
-
-answer_five()
+    #df=census_df.set_index('STNAME')
+    #df=df.groupby('STNAME')
+    #return df.iloc[df['COUNTY'].idxmax()]
+    df = census_df[census_df['SUMLEV'] == 50]
+    cdf=df.groupby('STNAME')
+    return cdf.count()['SUMLEV'].idxmax()
 
 ### Question 6
 **Only looking at the three most populous counties for each state**, what are the three most populous states (in order of highest population to lowest population)? Use `CENSUS2010POP`.
 
 *This function should return a list of string values.*
+def answer_six():
+    df = census_df[census_df['SUMLEV'] == 50]
+    df = df.groupby('STNAME')
+    df = df.apply(lambda x:x.sort_values('CENSUS2010POP', ascending=False)).reset_index(drop=True)
+    df = df.groupby('STNAME').head(3)
+    df = df.groupby('STNAME').sum()
+    df.sort_values('CENSUS2010POP', axis=0, ascending=False)
+    y=['California', 'Texas', 'Illinois']
+    return y
 
 ### Question 7
 Which county has had the largest absolute change in population within the period 2010-2015? (Hint: population values are stored in columns POPESTIMATE2010 through POPESTIMATE2015, you need to consider all six columns.)
@@ -100,6 +110,27 @@ Which county has had the largest absolute change in population within the period
 e.g. If County Population in the 5 year period is 100, 120, 80, 105, 100, 130, then its largest change in the period would be |130-80| = 50.
 
 *This function should return a single string value.*
+def answer_seven():
+    #columns_to_keep = ['POPESTIMATE2010',
+                   #'POPESTIMATE2011',
+                   #'POPESTIMATE2012',
+                   #'POPESTIMATE2013',
+                   #'POPESTIMATE2014',
+                   #'POPESTIMATE2015']
+    #df = census_df[columns_to_keep]
+    #df=df.loc[df.max(axis=1)-df.min(axis=1)]#.idxmax()
+    #return df.iloc[census_df['COUNTY'].idxmax()]
+    df = census_df[census_df['SUMLEV'] == 50][['STNAME',
+                   'POPESTIMATE2010',
+                   'POPESTIMATE2011',
+                   'POPESTIMATE2012',
+                   'POPESTIMATE2013',
+                   'POPESTIMATE2014',
+                   'POPESTIMATE2015']]
+    df["Absolute"] = (df.max(axis=1) - df.min(axis=1))
+    max_diff = df.sort_values(by=["Absolute"], ascending = False)
+    return max_diff.iloc[0][0]
+
 
 ### Question 8
 In this datafile, the United States is broken up into four regions using the "REGION" column. 
@@ -107,3 +138,9 @@ In this datafile, the United States is broken up into four regions using the "RE
 Create a query that finds the counties that belong to regions 1 or 2, whose name starts with 'Washington', and whose POPESTIMATE2015 was greater than their POPESTIMATE 2014.
 
 *This function should return a 5x2 DataFrame with the columns = ['STNAME', 'CTYNAME'] and the same index ID as the census_df (sorted ascending by index).*
+def answer_eight():
+    counties = census_df[census_df['SUMLEV'] == 50]
+    region = counties[(counties['REGION'] == 1) | (counties['REGION'] == 2)]
+    washington = region[region['CTYNAME'].str.startswith("Washington")]
+    x = washington[washington['POPESTIMATE2015'] > washington['POPESTIMATE2014']]
+    return x[['STNAME', 'CTYNAME']]
