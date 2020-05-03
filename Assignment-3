@@ -44,12 +44,13 @@ The index of this DataFrame should be the name of the country, and the columns s
        '2009', '2010', '2011', '2012', '2013', '2014', '2015'].
 
 *This function should return a DataFrame with 20 columns and 15 entries.*
-
 def answer_one():
     import pandas as pd
     energy=pd.read_excel('Energy Indicators.xls')#,header=None, footer=None)
     energy=energy[16:242]
     energy.columns=['A', 'B', 'Country', 'Energy Supply', 'Energy Supply per Capita', '% Renewable']
+    energy = energy.replace('...', 'NaN')
+    energy['Energy Supply']= 1000000*energy['Energy Supply']
     energy=energy.drop(['A', 'B'], axis=1)
     
     return energy
