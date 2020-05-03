@@ -65,11 +65,24 @@ def answer_one():
     GDP.columns=GDP.iloc[3]
     GDP=GDP[4:]
     GDP.rename(columns={'Country Name': 'Country'}, inplace='true')
-    GDP=GDP.set_index('Country')
-    GDP.loc['Korea, Rep.','Country']= "South Korea", 
-    GDP.loc["Iran, Islamic Rep.",'Country']= "Iran",
-    GDP.loc["Hong Kong SAR, China",'Country']="Hong Kong"
+    #GDP=GDP.set_index('Country')
+    #GDP.loc['Korea, Rep.','Country']= "South Korea", 
+    #GDP.loc["Iran, Islamic Rep.",'Country']= "Iran",
+    #GDP.loc["Hong Kong SAR, China",'Country']="Hong Kong"
+    GDP.loc[129,'Country']= "South Korea", 
+    GDP.loc[115,'Country']= "Iran",
+    GDP.loc[99,'Country']="Hong Kong"
+        
     ScimEn=pd.read_excel('scimagojr-3.xlsx')
     
-    return GDP
+    df= pd.merge(energy, ScimEn, on='Country', left_index=True, right_index=True)
+    dfm= pd.merge(df, GDP, on='Country', left_index=True, right_index=True)
+    
+    dfm=dfm.set_index('Country')
+    dfm=dfm.sort_values(["Rank"], axis=0,ascending=True, inplace=True)
+    #dfm=dfm['Rank', 'Documents', 'Citable documents', 'Citations', 'Self-citations','Citations per document', 'H index', 'Energy Supply',
+       #'Energy Supply per Capita', '% Renewable', '2006', '2007', '2008','2009', '2010', '2011', '2012', '2013', '2014', '2015']
+    
+    return dfm
 answer_one()
+
