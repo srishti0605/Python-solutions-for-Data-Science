@@ -44,6 +44,7 @@ The index of this DataFrame should be the name of the country, and the columns s
        '2009', '2010', '2011', '2012', '2013', '2014', '2015'].
 
 *This function should return a DataFrame with 20 columns and 15 entries.*
+
 def answer_one():
     import pandas as pd
     import numpy as np
@@ -79,6 +80,6 @@ def answer_one():
     
     dfm=dfm.set_index('Country')
     dfm.sort_values(['Rank'], axis=0,ascending=False, inplace=True)
-    dfm.drop(dfm.iloc[:, 11:59], inplace = True, axis = 1)
+    dfm.drop(dfm.iloc[:, 10:59], inplace = True, axis = 1)
     return dfm.head(15)
 answer_one()
