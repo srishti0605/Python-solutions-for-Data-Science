@@ -53,7 +53,6 @@ def answer_one():
     energy.columns=['A', 'B', 'Country', 'Energy Supply', 'Energy Supply per Capita', '% Renewable']
     energy = energy.replace('...', np.NaN)
     energy['Energy Supply']= 1000000*energy['Energy Supply']
-    #energy = energy.replace(-1000000, 'NaN')
     energy=energy.drop(['A', 'B'], axis=1)
     energy.loc[59,'Country']="Hong Kong"
     energy.loc[180,'Country']="South Korea"
@@ -62,6 +61,11 @@ def answer_one():
     energy['Country'] = energy['Country'].str.replace('\d+', '')
     energy['Country'] = energy['Country'].str.replace(r"\(.*\)","")
     
+    GDP=pd.read_csv('world_bank.csv')
+    GDP.columns=GDP.iloc[3]
+    GDP=GDP[3:]
     
-    return energy
+    ScimEn=pd.read_excel('scimagojr-3.xlsx')
+    
+    return GDP
 answer_one()
