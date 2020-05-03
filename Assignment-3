@@ -45,7 +45,6 @@ The index of this DataFrame should be the name of the country, and the columns s
 
 *This function should return a DataFrame with 20 columns and 15 entries.*
 
-
 def answer_one():
     import pandas as pd
     import numpy as np
@@ -60,10 +59,9 @@ def answer_one():
     energy.loc[180,'Country']="South Korea"
     energy.loc[230, 'Country'] = 'United Kingdom'
     energy.loc[232, 'Country'] = "United States"
+    energy['Country'] = energy['Country'].str.replace('\d+', '')
+    energy['Country'] = energy['Country'].str.replace(r"\(.*\)","")
     
-    #energy['Country']=energy['Country'].replace({"Republic of Korea": "South Korea",
-     #                           "United States of America": "United States",
-      #                          "United Kingdom of Great Britain and Northern Ireland": "United Kingdom",
-       #                         "China, Hong Kong Special Administrative Region": "Hong Kong"})
-    return energy.head(-60)
+    
+    return energy
 answer_one()
