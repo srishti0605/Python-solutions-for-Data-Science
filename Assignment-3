@@ -44,7 +44,6 @@ The index of this DataFrame should be the name of the country, and the columns s
        '2009', '2010', '2011', '2012', '2013', '2014', '2015'].
 
 *This function should return a DataFrame with 20 columns and 15 entries.*
-
 def answer_one():
     import pandas as pd
     import numpy as np
@@ -79,10 +78,11 @@ def answer_one():
     dfm= pd.merge(df, GDP, on='Country', left_index=True, right_index=True)
     
     dfm=dfm.set_index('Country')
-    dfm=dfm.sort_values(["Rank"], axis=0,ascending=True, inplace=True)
+    dfm.sort_values(['Rank'], axis=0,ascending=False, inplace=True)
+    dfc=dfm.iloc[:,0:10 60:69]
     #dfm=dfm['Rank', 'Documents', 'Citable documents', 'Citations', 'Self-citations','Citations per document', 'H index', 'Energy Supply',
        #'Energy Supply per Capita', '% Renewable', '2006', '2007', '2008','2009', '2010', '2011', '2012', '2013', '2014', '2015']
     
-    return dfm
+    #dfc= dfm[['Rank', 'Documents', 'Citable documents', 'Citations', 'Self-citations','Citations per document', 'H index', 'Energy Supply','Energy Supply per Capita', '% Renewable','2006', '2007', '2008','2009', '2010', '2011', '2012', '2013', '2014', '2015']]#, '2006.0', '2007.0', '2008.0','2009.0', '2010.0', '2011.0', '2012.0', '2013.0', '2014.0', '2015.0']]
+    return dfc.head(15)
 answer_one()
-
