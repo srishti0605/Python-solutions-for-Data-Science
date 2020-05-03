@@ -63,8 +63,12 @@ def answer_one():
     
     GDP=pd.read_csv('world_bank.csv')
     GDP.columns=GDP.iloc[3]
-    GDP=GDP[3:]
-    
+    GDP=GDP[4:]
+    GDP.rename(columns={'Country Name': 'Country'}, inplace='true')
+    GDP=GDP.set_index('Country')
+    GDP.loc['Korea, Rep.','Country']= "South Korea", 
+    GDP.loc["Iran, Islamic Rep.",'Country']= "Iran",
+    GDP.loc["Hong Kong SAR, China",'Country']="Hong Kong"
     ScimEn=pd.read_excel('scimagojr-3.xlsx')
     
     return GDP
