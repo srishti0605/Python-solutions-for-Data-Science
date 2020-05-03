@@ -44,6 +44,8 @@ The index of this DataFrame should be the name of the country, and the columns s
        '2009', '2010', '2011', '2012', '2013', '2014', '2015'].
 
 *This function should return a DataFrame with 20 columns and 15 entries.*
+
+
 def answer_one():
     import pandas as pd
     import numpy as np
@@ -54,6 +56,14 @@ def answer_one():
     energy['Energy Supply']= 1000000*energy['Energy Supply']
     #energy = energy.replace(-1000000, 'NaN')
     energy=energy.drop(['A', 'B'], axis=1)
+    energy.loc[59,'Country']="Hong Kong"
+    energy.loc[180,'Country']="South Korea"
+    energy.loc[230, 'Country'] = 'United Kingdom'
+    energy.loc[232, 'Country'] = "United States"
     
-    return energy
+    #energy['Country']=energy['Country'].replace({"Republic of Korea": "South Korea",
+     #                           "United States of America": "United States",
+      #                          "United Kingdom of Great Britain and Northern Ireland": "United Kingdom",
+       #                         "China, Hong Kong Special Administrative Region": "Hong Kong"})
+    return energy.head(-60)
 answer_one()
