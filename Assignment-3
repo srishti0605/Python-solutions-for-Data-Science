@@ -83,3 +83,46 @@ def answer_one():
     dfm.drop(dfm.iloc[:, 10:59], inplace = True, axis = 1)
     return dfm.head(15)
 answer_one()
+
+
+################################################################################################################################
+### Question 2 (6.6%)
+The previous question joined three datasets then reduced this to just the top 15 entries. When you joined the datasets, but before you reduced this to the top 15 items, how many entries did you lose?
+
+*This function should return a single number.*
+
+def answer_two():
+    import pandas as pd
+    import numpy as np
+    energy=pd.read_excel('Energy Indicators.xls')#,header=None, footer=None)
+    energy=energy[16:242]
+    energy.columns=['A', 'B', 'Country', 'Energy Supply', 'Energy Supply per Capita', '% Renewable']
+    energy = energy.replace('...', np.NaN)
+    energy['Energy Supply']= 1000000*energy['Energy Supply']
+    energy=energy.drop(['A', 'B'], axis=1)
+    energy.loc[59,'Country']="Hong Kong"
+    energy.loc[180,'Country']="South Korea"
+    energy.loc[230, 'Country'] = 'United Kingdom'
+    energy.loc[232, 'Country'] = "United States"
+    energy['Country'] = energy['Country'].str.replace('\d+', '')
+    energy['Country'] = energy['Country'].str.replace(r"\(.*\)","")
+    energy=energy.set_index('Country')
+    GDP=pd.read_csv('world_bank.csv')
+    GDP.columns=GDP.iloc[3]
+    GDP=GDP[4:]
+    GDP.rename(columns={'Country Name': 'Country'}, inplace='true')
+    GDP.loc[129,'Country']= "South Korea", 
+    GDP.loc[115,'Country']= "Iran",
+    GDP.loc[99,'Country']="Hong Kong"
+        
+    ScimEn=pd.read_excel('scimagojr-3.xlsx')
+    ScimEn=ScimEn.set_index('Country')
+    
+    GDP=GDP.set_index('Country')
+    df= pd.merge(energy, ScimEn, how='outer', left_index=True, right_index=True)
+    dfm= pd.merge(df, GDP, how='outer', left_index=True, right_index=True)
+    
+    return dfm.shape[0]-15#len(GDP)+len(energy)+len(ScimEn)-len(dfm)
+answer_two()
+
+
