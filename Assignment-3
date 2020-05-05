@@ -52,42 +52,39 @@ The index of this DataFrame should be the name of the country, and the columns s
 def answer_one():
     import pandas as pd
     import numpy as np
-    energy=pd.read_excel('Energy Indicators.xls')#,header=None, footer=None)
-    energy=energy[16:242]
-    energy.columns=['A', 'B', 'Country', 'Energy Supply', 'Energy Supply per Capita', '% Renewable']
-    energy = energy.replace('...', np.NaN)
-    energy['Energy Supply']= 1000000*energy['Energy Supply']
-    energy=energy.drop(['A', 'B'], axis=1)
-    energy.loc[59,'Country']="Hong Kong"
-    energy.loc[180,'Country']="South Korea"
-    energy.loc[230, 'Country'] = 'United Kingdom'
-    energy.loc[232, 'Country'] = "United States"
-    energy['Country'] = energy['Country'].str.replace('\d+', '')
-    energy['Country'] = energy['Country'].str.replace(r"\(.*\)","")
-    
-    GDP=pd.read_csv('world_bank.csv')
-    GDP.columns=GDP.iloc[3]
-    GDP=GDP[4:]
-    GDP.rename(columns={'Country Name': 'Country'}, inplace='true')
-    #GDP=GDP.set_index('Country')
-    #GDP.loc['Korea, Rep.','Country']= "South Korea", 
-    #GDP.loc["Iran, Islamic Rep.",'Country']= "Iran",
-    #GDP.loc["Hong Kong SAR, China",'Country']="Hong Kong"
-    GDP.loc[129,'Country']= "South Korea", 
-    GDP.loc[115,'Country']= "Iran",
-    GDP.loc[99,'Country']="Hong Kong"
-        
-    ScimEn=pd.read_excel('scimagojr-3.xlsx')
-    
-    df= pd.merge(energy, ScimEn, on='Country', left_index=True, right_index=True)
-    dfm= pd.merge(df, GDP, on='Country', left_index=True, right_index=True)
-    
-    dfm=dfm.set_index('Country')
-    dfm.sort_values(['Rank'], axis=0,ascending=False, inplace=True)
-    dfm.drop(dfm.iloc[:, 10:59], inplace = True, axis = 1)
-    return dfm.head(15)
-answer_one()
+    energy = pd.read_excel('Energy Indicators.xls', skip_footer=38, skiprows=17, parse_cols='C:F') 
+    energy.columns = ['Country', 'Energy Supply', 'Energy Supply per Capita', '% Renewable']
+    energy.loc[energy['Energy Supply'] == '...'] = np.NaN
+    energy[['Energy Supply', 'Energy Supply per Capita']] = energy[['Energy Supply', 'Energy Supply per Capita']].apply(pd.to_numeric)
+    energy['Energy Supply'] = energy['Energy Supply']*1000000
+    energy['Country'] = energy['Country'].str.replace(r" \(.*\)","")
+    energy['Country'] = energy['Country'].str.replace(r"([0-9]+)$","")
+    energy['Country'].replace({"Republic of Korea": "South Korea",
+                  "United States of America": "United States",
+                  "United Kingdom of Great Britain and Northern Ireland": "United Kingdom",
+                  "China, Hong Kong Special Administrative Region": "Hong Kong"}, inplace=True)
 
+    energy = energy.set_index('Country')
+    
+    GDP = pd.read_csv('world_bank.csv', skiprows=4)
+    GDP['Country Name'].replace({"Korea, Rep.": "South Korea", 
+                    "Iran, Islamic Rep.": "Iran",
+                    "Hong Kong SAR, China": "Hong Kong"}, inplace=True)
+    
+    GDP = GDP[np.append(['Country Name'],np.arange(2006, 2016).astype(str))]
+    GDP = GDP.rename(columns={'Country Name': 'Country'})
+    GDP = GDP.set_index('Country')
+    
+    ScimEn = pd.read_excel('scimagojr-3.xlsx', header=0)
+    ScimEn.reset_index()
+    ScimEn = ScimEn.set_index('Country')
+    dfc = pd.merge(energy, GDP, how='outer', left_index=True, right_index=True)
+    dfm = pd.merge(ScimEn, dfc, how='outer', left_index=True, right_index=True)
+    dfm = dfm.reset_index().dropna(thresh=dfm.shape[1]-10).set_index('Country')
+    dfm = dfm.loc[dfm['Rank']<=15]
+    return dfm
+
+answer_one()
 
 ################################################################################################################################
 
