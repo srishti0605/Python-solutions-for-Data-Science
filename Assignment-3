@@ -245,3 +245,12 @@ def answer_nine():
     Top15.corr(method ='pearson') 
     return '0.833298'
 answer_nine()
+
+def answer_ten():
+    Top15 = answer_one()
+    #region = counties[(counties['REGION'] == 1) | (counties['REGION'] == 2)]
+    med=Top15['% Renewable'].median()
+    Top15['HighRenew']=Top15['% Renewable']>med
+    return Top15
+answer_ten()
+
