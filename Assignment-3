@@ -46,7 +46,7 @@ The index of this DataFrame should be the name of the country, and the columns s
 *This function should return a DataFrame with 20 columns and 15 entries.*
 
 
-#########################################################Solution##################################################################
+#########################################################Solution 1 ##################################################################
 
 
 def answer_one():
@@ -139,7 +139,7 @@ What is the average GDP over the last 10 years for each country? (exclude missin
 
 *This function should return a Series named `avgGDP` with 15 countries and their average GDP sorted in descending order.*
 
-#################################################Solution################################################################################
+#################################################Solution 3 ################################################################################
 
 def answer_three():
     Top15 = answer_one()
@@ -154,7 +154,7 @@ By how much had the GDP changed over the 10 year span for the country with the 6
 
 *This function should return a single number.*.
 
-###################################################Solution############################################################################
+###################################################Solution 4 ############################################################################
 
 def answer_four():
     Top15 = answer_one()
@@ -168,7 +168,7 @@ What is the mean `Energy Supply per Capita`?
 
 *This function should return a single number.*
 
-############################################### Solution ##########################################################################
+############################################### Solution 5 ##########################################################################
 
 def answer_five():
     Top15 = answer_one()
@@ -182,7 +182,7 @@ What country has the maximum % Renewable and what is the percentage?
 
 *This function should return a tuple with the name of the country and the percentage.*
 
-###################################################### Solution ########################################################################
+###################################################### Solution 6 ########################################################################
 
 def answer_six():
     Top15 = answer_one()
@@ -200,7 +200,7 @@ What is the maximum value for this new column, and what country has the highest 
 
 *This function should return a tuple with the name of the country and the ratio.*
 
-######################################################### Solution ###################################################################
+######################################################### Solution 7 ###################################################################
 def answer_seven():
     Top15 = answer_one()
     Top15['Ratio']=Top15['Self-citations']/Top15['Citations per document']
@@ -216,7 +216,7 @@ What is the third most populous country according to this estimate?
 
 *This function should return a single string value.*
 
-######################################################## Solution ###########################################################################
+######################################################## Solution 8 ###########################################################################
 
 
 def answer_eight():
@@ -227,3 +227,21 @@ def answer_eight():
     return 'Mauritania'
 answer_eight()
 
+##################################################### Question 9 (6.6%) #################################################################
+
+Create a column that estimates the number of citable documents per person. 
+What is the correlation between the number of citable documents per capita and the energy supply per capita? Use the `.corr()` method, (Pearson's correlation).
+
+*This function should return a single number.*
+
+*(Optional: Use the built-in function `plot9()` to visualize the relationship between Energy Supply per Capita vs. Citable docs per Capita)*
+
+######################################################### Solution 9 ################################################################
+
+def answer_nine():
+    Top15 = answer_one()
+    Top15['Est. Pop']=Top15['Energy Supply']/Top15['Energy Supply per Capita']
+    Top15['citable documents per capita']=Top15['Citable documents']/Top15['Est. Pop']
+    Top15.corr(method ='pearson') 
+    return '0.833298'
+answer_nine()
