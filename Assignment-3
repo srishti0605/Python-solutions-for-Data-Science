@@ -246,11 +246,13 @@ def answer_nine():
     return '0.833298'
 answer_nine()
 
+
 def answer_ten():
     Top15 = answer_one()
     #region = counties[(counties['REGION'] == 1) | (counties['REGION'] == 2)]
     med=Top15['% Renewable'].median()
     Top15['HighRenew']=Top15['% Renewable']>med
-    return Top15
+    
+    return Top15['HighRenew'].sort_values(ascending=True, inplace=False)
 answer_ten()
 
