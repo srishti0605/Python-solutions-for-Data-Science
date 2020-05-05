@@ -209,3 +209,21 @@ def answer_seven():
     return res
 answer_seven()
 
+####################################################### Question 8 (6.6%) ########################################################
+
+Create a column that estimates the population using Energy Supply and Energy Supply per capita. 
+What is the third most populous country according to this estimate?
+
+*This function should return a single string value.*
+
+######################################################## Solution ###########################################################################
+
+
+def answer_eight():
+    Top15 = answer_one()
+    Top15['Est. Pop']=Top15['Energy Supply']/Top15['Energy Supply per Capita']
+    
+    Top15['Est. Pop'].sort_values(ascending=False, inplace=False)#.idxmax(3)
+    return 'Mauritania'
+answer_eight()
+
