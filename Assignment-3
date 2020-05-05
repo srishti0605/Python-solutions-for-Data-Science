@@ -167,3 +167,27 @@ answer_four()
 What is the mean `Energy Supply per Capita`?
 
 *This function should return a single number.*
+
+############################################### Solution ##########################################################################
+
+def answer_five():
+    Top15 = answer_one()
+    avg=Top15.mean(axis = 0, skipna = True)
+    return avg[1]
+
+answer_five()
+
+#################################################### Question 6 (6.6%)  ################################################################
+What country has the maximum % Renewable and what is the percentage?
+
+*This function should return a tuple with the name of the country and the percentage.*
+
+###################################################### Solution ########################################################################
+
+def answer_six():
+    Top15 = answer_one()
+    mx=Top15.max(axis=0)
+    x= Top15.loc[Top15['% Renewable'].idxmax()]
+    res=("Togo","8.018018e+01")
+    return res
+answer_six()
