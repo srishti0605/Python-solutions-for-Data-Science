@@ -1,0 +1,94 @@
+def get_list_of_university_towns():
+    import re
+    import pandas as pd
+
+    fo = open('university_towns.txt', "r")
+    rows = fo.readlines()
+    fo.close()
+    dfm = pd.DataFrame(columns=('State', 'RegionName'))
+    i = 0  # counter for each new line in the dataframe
+    state_name= ""  # Empty initial state string
+    region_name = ""  # Empty initial region string
+    for x in rows:
+        if '[edit]' in x:
+            state_name = x.replace('[edit]', "")
+            #state_name.replace('\n',"",)
+        else:
+            region_name = re.sub(r' \(.*', "", x)
+            #region_name.replace('\n',"")
+            dfm.loc[i] = [state_name.replace('\n',"",), region_name.replace('\n',"",)]
+            i += 1
+            
+    return dfm
+    
+    
+    '''Returns the year and quarter of the recession start time as a 
+    string value in a format such as 2005q3'''
+def get_recession_start():
+    df = pd.read_excel('gdplev.xls', header=None)#4)
+    df.drop([0,1,2,3,7], axis=1, inplace= True)
+    dfm = pd.DataFrame(columns=('Name', 'GDP','GDP 2009'))
+    dfm=df.iloc[73:]
+    #diff=[73:]
+    #i=73
+    for i in dfm.index: #m.shape[0]:
+        if (dfm[6][i]-dfm[6][i+1]<0)&(dfm[6][i+1]-dfm[6][i+2]<0):
+            return dfm[4][i]
+            i+=1
+    
+    return dfm
+get_recession_start()    
+
+
+def get_recession_end():
+    df = pd.read_excel('gdplev.xls', header=None)#4)
+    df.drop([0,1,2,3,7], axis=1, inplace= True)
+    dfm = pd.DataFrame(columns=('Name', 'GDP','GDP 2009'))
+    dfm=df.iloc[73:]
+    #diff=[73:]
+    #i=73
+    for i in dfm.index: #m.shape[0]:
+        if (dfm[6][i]-dfm[6][i+1]>0)&(dfm[6][i+1]-dfm[6][i+2]>0):
+            return dfm[4][i+2]
+            i+=1
+    
+    return dfm
+get_recession_end()
+
+
+def get_recession_bottom():
+    df = pd.read_excel('gdplev.xls', header=None)#4)
+    df.drop([0,1,2,3,7], axis=1, inplace= True)
+    dfm = pd.DataFrame(columns=('Name', 'GDP','GDP 2009'))
+    dfm=df.iloc[73:]
+    #diff=[73:]
+    #i=73
+    for i in dfm.index: #m.shape[0]:
+        if (dfm[6][i]-dfm[6][i+1]<0)&(dfm[6][i+1]-dfm[6][i+2]>0):
+            return dfm[4][i+1]
+            i+=1
+    
+    return dfm
+get_recession_bottom()
+
+
+def convert_housing_data_to_quarters():
+    df = pd.read_csv('City_Zhvi_AllHomes.csv',header=None)
+    '''Converts the housing data to quarters and returns it as mean 
+    values in a dataframe. This dataframe should be a dataframe with
+    columns for 2000q1 through 2016q3, and should have a multi-index
+    in the shape of ["State","RegionName"].
+    
+    Note: Quarters are defined in the assignment description, they are
+    not arbitrary three month periods.
+    
+    The resulting dataframe should have 67 columns, and 10,730 rows.
+    '''
+    
+    df.drop([6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50], axis=1, inplace=True)
+    headers = df.iloc[0]
+    dfm  = pd.DataFrame(df.values[1:], columns=headers)
+
+    dfm.set_index('State','RegionName', inplace=True)
+    return dfm
+convert_housing_data_to_quarters()
