@@ -96,15 +96,15 @@ def convert_housing_data_to_quarters():
     #dfc.set_index('State','RegionName', inplace=True)
     #year=2000
     for year in range (2000,2016):
-        dfc[str(year)+str('q1')]=((dfm[str(year)+str('-01')]+dfm[str(year)+str('-02')]+dfm[str(year)+str('-03')]).astype(float))/3
-        dfc[str(year)+str('q2')]=((dfm[str(year)+str('-04')]+dfm[str(year)+str('-05')]+dfm[str(year)+str('-06')]).astype(float))/3
-        dfc[str(year)+str('q3')]=((dfm[str(year)+str('-07')]+dfm[str(year)+str('-08')]+dfm[str(year)+str('-09')]).astype(float))/3
-        dfc[str(year)+str('q4')]=((dfm[str(year)+str('-10')]+dfm[str(year)+str('-11')]+dfm[str(year)+str('-12')]).astype(float))/3
+        dfc[str(year)+str('q1')]=(((dfm[str(year)+str('-01')]).astype(float)+(dfm[str(year)+str('-02')]).astype(float)+(dfm[str(year)+str('-03')]).astype(float)))/3
+        dfc[str(year)+str('q2')]=(((dfm[str(year)+str('-04')]).astype(float)+(dfm[str(year)+str('-05')]).astype(float)+(dfm[str(year)+str('-06')]).astype(float)))/3
+        dfc[str(year)+str('q3')]=(((dfm[str(year)+str('-07')]).astype(float)+(dfm[str(year)+str('-08')]).astype(float)+(dfm[str(year)+str('-09')]).astype(float)))/3
+        dfc[str(year)+str('q4')]=(((dfm[str(year)+str('-10')]).astype(float)+(dfm[str(year)+str('-11')]).astype(float)+(dfm[str(year)+str('-12')]).astype(float)))/3
         year+=1
     year=2016
-    dfc[str(year)+str('q1')]=dfm[str(year)+str('-01')]+dfm[str(year)+str('-02')]+dfm[str(year)+str('-03')]
-    dfc[str(year)+str('q2')]=dfm[str(year)+str('-04')]+dfm[str(year)+str('-05')]+dfm[str(year)+str('-06')]
-    dfc[str(year)+str('q3')]=dfm[str(year)+str('-07')]+dfm[str(year)+str('-08')]
+    dfc[str(year)+str('q1')]=(((dfm[str(year)+str('-01')]).astype(float)+(dfm[str(year)+str('-02')]).astype(float)+(dfm[str(year)+str('-03')]).astype(float)))/3
+    dfc[str(year)+str('q2')]=(((dfm[str(year)+str('-04')]).astype(float)+(dfm[str(year)+str('-05')]).astype(float)+(dfm[str(year)+str('-06')]).astype(float)))/3
+    dfc[str(year)+str('q3')]=(((dfm[str(year)+str('-07')]).astype(float)+(dfm[str(year)+str('-08')]).astype(float)))/2
     dfc.sort_values(by=['State','RegionName'],ascending=True, inplace= True)
     dfc['State'] = dfc['State'].replace(states)
     dfc.set_index(['State','RegionName'], inplace=True)
