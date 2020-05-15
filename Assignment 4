@@ -73,42 +73,6 @@ def get_recession_bottom():
     return dfm
 get_recession_bottom()
 
-
-def convert_housing_data_to_quarters():
-    df = pd.read_csv('City_Zhvi_AllHomes.csv',header=None)
-    '''Converts the housing data to quarters and returns it as mean 
-    values in a dataframe. This dataframe should be a dataframe with
-    columns for 2000q1 through 2016q3, and should have a multi-index
-    in the shape of ["State","RegionName"].
-    
-    Note: Quarters are defined in the assignment description, they are
-    not arbitrary three month periods.
-    
-    The resulting dataframe should have 67 columns, and 10,730 rows.
-    '''
-    
-    df.drop([6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50], axis=1, inplace=True)
-    headers = df.iloc[0]
-    dfm  = pd.DataFrame(df.values[1:], columns=headers)
-    dfc=dfm.ix[:, 0:6]
-    #df.drop([0,1,2,3,4,5],axis=1,inplace=True)
-    #dfm/=3
-    for year in range (2000,2015):
-        dfc[str(year)+str('q1')]=dfm[str(year)+str('-01')]+dfm[str(year)+str('-02')]+dfm[str(year)+str('-03')]
-        dfc[str(year)+str('q2')]=dfm[str(year)+str('-04')]+dfm[str(year)+str('-05')]+dfm[str(year)+str('-06')]
-        dfc[str(year)+str('q3')]=dfm[str(year)+str('-07')]+dfm[str(year)+str('-08')]+dfm[str(year)+str('-09')]
-        dfc[str(year)+str('q4')]=dfm[str(year)+str('-10')]+dfm[str(year)+str('-11')]+dfm[str(year)+str('-12')]
-        year+=1
-    year=2016
-    dfc[str(year)+str('q1')]=dfm[str(year)+str('-01')]+dfm[str(year)+str('-02')]+dfm[str(year)+str('-03')]
-    dfc[str(year)+str('q2')]=dfm[str(year)+str('-04')]+dfm[str(year)+str('-05')]+dfm[str(year)+str('-06')]
-    dfc[str(year)+str('q3')]=dfm[str(year)+str('-07')]+dfm[str(year)+str('-08')]
-    dfc.set_index(['State','RegionName'], inplace=True)
-    return dfc
-convert_housing_data_to_quarters()
-
-
-
 def convert_housing_data_to_quarters():
     df = pd.read_csv('City_Zhvi_AllHomes.csv',header=None)
     '''Converts the housing data to quarters and returns it as mean 
@@ -127,11 +91,11 @@ def convert_housing_data_to_quarters():
     dfm  = pd.DataFrame(df.values[1:], columns=headers)
 
     #dfm.set_index('State','RegionName', inplace=True)
-    dfc=dfm.ix[:, 0:6]
+    dfc=dfm.ix[:, 0:3]
     
     #dfc.set_index('State','RegionName', inplace=True)
     #year=2000
-    for year in range (2000,2015):
+    for year in range (2000,2016):
         dfc[str(year)+str('q1')]=((dfm[str(year)+str('-01')]+dfm[str(year)+str('-02')]+dfm[str(year)+str('-03')]).astype(float))/3
         dfc[str(year)+str('q2')]=((dfm[str(year)+str('-04')]+dfm[str(year)+str('-05')]+dfm[str(year)+str('-06')]).astype(float))/3
         dfc[str(year)+str('q3')]=((dfm[str(year)+str('-07')]+dfm[str(year)+str('-08')]+dfm[str(year)+str('-09')]).astype(float))/3
@@ -141,7 +105,8 @@ def convert_housing_data_to_quarters():
     dfc[str(year)+str('q1')]=dfm[str(year)+str('-01')]+dfm[str(year)+str('-02')]+dfm[str(year)+str('-03')]
     dfc[str(year)+str('q2')]=dfm[str(year)+str('-04')]+dfm[str(year)+str('-05')]+dfm[str(year)+str('-06')]
     dfc[str(year)+str('q3')]=dfm[str(year)+str('-07')]+dfm[str(year)+str('-08')]
+    dfc['State'] = dfc['State'].replace(states)
     dfc.set_index(['State','RegionName'], inplace=True)
-
-    return dfc
+    dfc.drop(['RegionID'],axis=1,inplace=True)
+    return dfc#.sort_values(inplace=True)
 convert_housing_data_to_quarters()
