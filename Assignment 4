@@ -105,8 +105,9 @@ def convert_housing_data_to_quarters():
     dfc[str(year)+str('q1')]=dfm[str(year)+str('-01')]+dfm[str(year)+str('-02')]+dfm[str(year)+str('-03')]
     dfc[str(year)+str('q2')]=dfm[str(year)+str('-04')]+dfm[str(year)+str('-05')]+dfm[str(year)+str('-06')]
     dfc[str(year)+str('q3')]=dfm[str(year)+str('-07')]+dfm[str(year)+str('-08')]
+    dfc.sort_values(by=['State','RegionName'],ascending=True, inplace= True)
     dfc['State'] = dfc['State'].replace(states)
     dfc.set_index(['State','RegionName'], inplace=True)
     dfc.drop(['RegionID'],axis=1,inplace=True)
-    return dfc#.sort_values(inplace=True)
-convert_housing_data_to_quarters()
+    return dfc
+convert_housing_data_to_quarters().loc["Texas"].loc["Austin"].loc["2010q3"]
