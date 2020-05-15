@@ -85,25 +85,18 @@ def convert_housing_data_to_quarters():
     
     The resulting dataframe should have 67 columns, and 10,730 rows.
     '''
-    
     df.drop([6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50], axis=1, inplace=True)
     headers = df.iloc[0]
     dfm  = pd.DataFrame(df.values[1:], columns=headers)
-
-    #dfm.set_index('State','RegionName', inplace=True)
     dfc=dfm.ix[:, 0:3]
-    
-    #dfc.set_index('State','RegionName', inplace=True)
-    #year=2000
-    for year in range (2000,2016):
+    for year in range (2000,2017):
         dfc[str(year)+str('q1')]=(((dfm[str(year)+str('-01')]).astype(float)+(dfm[str(year)+str('-02')]).astype(float)+(dfm[str(year)+str('-03')]).astype(float)))/3
         dfc[str(year)+str('q2')]=(((dfm[str(year)+str('-04')]).astype(float)+(dfm[str(year)+str('-05')]).astype(float)+(dfm[str(year)+str('-06')]).astype(float)))/3
+        if year==2016:
+            break
         dfc[str(year)+str('q3')]=(((dfm[str(year)+str('-07')]).astype(float)+(dfm[str(year)+str('-08')]).astype(float)+(dfm[str(year)+str('-09')]).astype(float)))/3
         dfc[str(year)+str('q4')]=(((dfm[str(year)+str('-10')]).astype(float)+(dfm[str(year)+str('-11')]).astype(float)+(dfm[str(year)+str('-12')]).astype(float)))/3
         year+=1
-    year=2016
-    dfc[str(year)+str('q1')]=(((dfm[str(year)+str('-01')]).astype(float)+(dfm[str(year)+str('-02')]).astype(float)+(dfm[str(year)+str('-03')]).astype(float)))/3
-    dfc[str(year)+str('q2')]=(((dfm[str(year)+str('-04')]).astype(float)+(dfm[str(year)+str('-05')]).astype(float)+(dfm[str(year)+str('-06')]).astype(float)))/3
     dfc[str(year)+str('q3')]=(((dfm[str(year)+str('-07')]).astype(float)+(dfm[str(year)+str('-08')]).astype(float)))/2
     dfc.sort_values(by=['State','RegionName'],ascending=True, inplace= True)
     dfc['State'] = dfc['State'].replace(states)
