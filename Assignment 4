@@ -24,32 +24,34 @@ def get_list_of_university_towns():
     
     '''Returns the year and quarter of the recession start time as a 
     string value in a format such as 2005q3'''
+'''Returns the year and quarter of the recession start time as a 
+    string value in a format such as 2005q3'''
 def get_recession_start():
-    df = pd.read_excel('gdplev.xls', header=None)#4)
-    df.drop([0,1,2,3,7], axis=1, inplace= True)
-    dfm = pd.DataFrame(columns=('Name', 'GDP','GDP 2009'))
-    dfm=df.iloc[73:]
+    dfm = pd.read_excel('gdplev.xls', skiprows=219, header=None)#4)
+    dfm.drop([0,1,2,3,7], axis=1, inplace= True)
+    #dfm = pd.DataFrame(columns=('Name', 'GDP','GDP 2009'))
+    #dfm=df.iloc[73:]
     #diff=[73:]
     #i=73
     for i in dfm.index: #m.shape[0]:
-        if (dfm[6][i]-dfm[6][i+1]<0)&(dfm[6][i+1]-dfm[6][i+2]<0):
-            return dfm[4][i]
+        if ((dfm[6][i]>dfm[6][i+1])&(dfm[6][i+1]>dfm[6][i+2])&(dfm[6][i+2]<dfm[6][i+3])&(dfm[6][i+3]<dfm[6][i+4])):
+            return dfm[4][i-1]
             i+=1
     
     return dfm
-get_recession_start()    
+get_recession_start()      
 
 
 def get_recession_end():
-    df = pd.read_excel('gdplev.xls', header=None)#4)
-    df.drop([0,1,2,3,7], axis=1, inplace= True)
-    dfm = pd.DataFrame(columns=('Name', 'GDP','GDP 2009'))
-    dfm=df.iloc[73:]
+    dfm = pd.read_excel('gdplev.xls', skiprows=219, header=None)#4)
+    dfm.drop([0,1,2,3,7], axis=1, inplace= True)
+    #dfm = pd.DataFrame(columns=('Name', 'GDP','GDP 2009'))
+    #dfm=df.iloc[73:]
     #diff=[73:]
     #i=73
     for i in dfm.index: #m.shape[0]:
-        if (dfm[6][i]-dfm[6][i+1]>0)&(dfm[6][i+1]-dfm[6][i+2]>0):
-            return dfm[4][i+2]
+        if ((dfm[6][i]>dfm[6][i+1])&(dfm[6][i+1]>dfm[6][i+2])&(dfm[6][i+2]<dfm[6][i+3])&(dfm[6][i+3]<dfm[6][i+4])):
+            return dfm[4][i+4]
             i+=1
     
     return dfm
@@ -57,21 +59,19 @@ get_recession_end()
 
 
 def get_recession_bottom():
-    df = pd.read_excel('gdplev.xls', header=None)#4)
-    df.drop([0,1,2,3,7], axis=1, inplace= True)
-    dfm = pd.DataFrame(columns=('Name', 'GDP','GDP 2009'))
-    dfm=df.iloc[73:]
+    dfm = pd.read_excel('gdplev.xls', skiprows=219, header=None)
+    dfm.drop([0,1,2,3,7], axis=1, inplace= True)
+    #dfm = pd.DataFrame(columns=('Name', 'GDP','GDP 2009'))
+    #dfm=df.iloc[73:]
     #diff=[73:]
     #i=73
     for i in dfm.index: #m.shape[0]:
-        if (dfm[6][i]-dfm[6][i+1]<0)&(dfm[6][i+1]-dfm[6][i+2]>0):
-            return dfm[4][i+1]
+        if ((dfm[6][i]>dfm[6][i+1])&(dfm[6][i+1]>dfm[6][i+2])&(dfm[6][i+2]<dfm[6][i+3])&(dfm[6][i+3]<dfm[6][i+4])):
+            return dfm[4][i+2]
             i+=1
     
     return dfm
 get_recession_bottom()
-
-
 def convert_housing_data_to_quarters():
     df = pd.read_csv('City_Zhvi_AllHomes.csv',header=None)
     '''Converts the housing data to quarters and returns it as mean 
